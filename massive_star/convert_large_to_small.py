@@ -17,6 +17,9 @@ implemented_networks = {
                        "mn49", "mn51", "mn53",
                        "fe50", "fe52", "fe54", "fe56", 
                        "co53", "co55", "co57", "ni56", "ni58", "cu59", "zn60"],
+    "network16": ["n", "h1", "he4", "c12", "o16", "ne20", "mg24", "si28",
+                "s32", "ar36", "ca40", "ti44", "cr48", "cr56", "mn56", 
+                "fe52", "fe54", "fe56", "co56", "ni56"]
 }
 # both typically include p_nse. We'll deal with that split by later setting 'p' to 0
 
@@ -52,7 +55,7 @@ def main(file_name, new_file_name, network):
     network_col_bulk = []
     c = Composition(large_network)
     for row in bulk_data:
-        c.set_array(list(row)[start:end+1])
+        c.set_dict(dict(zip(bulk_names[start:end+1], list(row)[start:end+1])))
         new_c = c.bin_as(small_network)
         dictionary = new_c.data
         dictionary['p'] = 0
