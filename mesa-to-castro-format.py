@@ -1,4 +1,5 @@
 import numpy as np
+from pynucastro.nucdata import Nucleus
 import argparse
 
 '''
@@ -46,7 +47,13 @@ def main(file_name, new_file_name):
     if len(neutron_name) < 1:
         raise ValueError("No 'n', 'neut', or 'neutron' in MESA file column names.")
     start = bulk_names.index(neutron_name.pop())
-    end = bulk_names.index('opacity')
+    end = start
+    while end < len(bulk_names)-1:
+        try:
+            _ = Nucleus(bulk_names[end+1])
+            end = end+1
+        except ValueError as e:
+            break
 
     # set up new columns
     col_names = list(variable_names.keys()) + list(bulk_names[start:end])

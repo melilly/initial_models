@@ -1,5 +1,5 @@
 import numpy as np
-from pynucastro.nucdata import Composition
+from pynucastro.nucdata import Composition, Nucleus
 import argparse
 
 implemented_networks = {
@@ -43,11 +43,19 @@ def main(file_name, new_file_name, network):
 
     # SHRINK WITH PYNUCASTRO
     try:
-        start, end = bulk_names.index('neut'), bulk_names.index('opacity')-1
-        large_network = bulk_names[start:end+1]
+        start = bulk_names.index('neut')
     except ValueError as e:
-        print("The given start or end species is not listed in the MESA file.")
+        print("The given start species is not listed in the MESA file.")
         raise e
+    end = start
+    while end < len(bulk_names)-1:
+        try:
+            _ = Nucleus(bulk_names[end+1])
+            end = end+1
+        except ValueError as e:
+            break
+    large_network = bulk_names[start:end+1]
+
 
     small_network = implemented_networks[network]
 
